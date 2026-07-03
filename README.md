@@ -1,0 +1,267 @@
+# FarmaStock — CRUD de Medicamentos
+
+Proyecto universitario para la práctica de **Scrum Poker** y **Sprint Planning**.
+El incremento funcional final será un **CRUD de Gestión de Medicamentos** para FarmaStock.
+
+> ⚠️ **Estado actual:** solo está montada la **base técnica** del proyecto. La lógica del CRUD queda pendiente y está marcada con comentarios `TODO` para que el equipo la complete.
+
+---
+
+## 1. Descripción del proyecto
+
+Aplicación web que permitirá **crear, listar, editar y eliminar** medicamentos de una farmacia (FarmaStock). Está dividida en dos partes:
+
+- **Backend:** API REST con Node.js + Express, conectada a MySQL.
+- **Frontend:** interfaz en React (Vite) que consume la API.
+
+---
+
+## 2. Tecnologías usadas
+
+| Capa            | Tecnología            |
+| --------------- | --------------------- |
+| Frontend        | React.js + Vite       |
+| Backend         | Node.js + Express.js  |
+| Base de datos   | MySQL (`mysql2`)      |
+| Control versión | Git + GitHub          |
+
+---
+
+## 3. Requisitos previos
+
+Instala estas herramientas antes de empezar:
+
+- **Node.js** (v18 o superior) → https://nodejs.org
+- **MySQL** (v8 o superior) → https://dev.mysql.com/downloads/
+- **Git** → https://git-scm.com
+
+Verifica que estén instalados (PowerShell):
+
+```powershell
+node -v
+npm -v
+git --version
+mysql --version
+```
+
+---
+
+## 4. Cómo clonar el repositorio
+
+```powershell
+git clone https://github.com/DmeshellHeredia/farmastock-crud-medicamentos.git
+cd farmastock-crud-medicamentos
+```
+
+---
+
+## 5. Instalar dependencias del backend
+
+```powershell
+cd backend
+npm install
+```
+
+> Esto instala Express, CORS, dotenv y mysql2. Volver a la raíz con `cd ..` cuando termines.
+
+---
+
+## 6. Instalar dependencias del frontend
+
+```powershell
+cd frontend
+npm install
+```
+
+> Esto instala React y Vite. Volver a la raíz con `cd ..` cuando termines.
+
+---
+
+## 7. Crear la base de datos usando `schema.sql`
+
+Desde la **raíz del proyecto** (PowerShell). Te pedirá la contraseña de MySQL:
+
+```powershell
+Get-Content backend/database/schema.sql | mysql -u root -p
+```
+
+Esto crea la base de datos `farmastock_db` y la tabla `medicamentos`.
+
+> ⚠️ **PowerShell no soporta el operador `<`** (`mysql -u root -p < archivo.sql` da error).
+> Usa `Get-Content archivo.sql | mysql ...` como arriba. Si prefieres CMD, sí funciona:
+> `cmd /c "mysql -u root -p < backend/database/schema.sql"`
+
+---
+
+## 8. Insertar datos de prueba usando `seed.sql`
+
+```powershell
+Get-Content backend/database/seed.sql | mysql -u root -p
+```
+
+Esto agrega 3 medicamentos de ejemplo.
+
+> 💡 Si prefieres una interfaz gráfica, puedes abrir y ejecutar ambos `.sql` desde **MySQL Workbench**.
+
+---
+
+## 9. Cómo configurar `.env`
+
+El backend necesita un archivo `.env` con las credenciales de MySQL.
+
+```powershell
+cd backend
+Copy-Item .env.example .env
+```
+
+Luego abre `backend/.env` y edita tus datos reales:
+
+```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=tu_password
+DB_NAME=farmastock_db
+DB_PORT=3306
+PORT=3001
+```
+
+*(Opcional)* El frontend también tiene un `.env.example` con `VITE_API_URL` si quieres cambiar la URL del backend.
+
+---
+
+## 10. Cómo correr el backend
+
+```powershell
+cd backend
+npm run dev
+```
+
+- Servidor en: **http://localhost:3001**
+- Prueba rápida: abre http://localhost:3001/ → debe responder un JSON.
+- Endpoint del CRUD: http://localhost:3001/api/medicamentos
+
+> `npm run dev` usa **nodemon** (reinicia solo al guardar). También existe `npm start`.
+
+---
+
+## 11. Cómo correr el frontend
+
+En **otra terminal**:
+
+```powershell
+cd frontend
+npm run dev
+```
+
+- App en: **http://localhost:5173**
+
+---
+
+## 12. Qué partes debe completar cada integrante
+
+Todo el código base está listo; la lógica pendiente está marcada con `TODO`.
+
+### 🎨 Frontend
+> Nota: la tabla que **lista** los medicamentos ya está conectada al backend y funcionando (sirve de ejemplo). Falta lo demás.
+- [ ] Completar el formulario de registro con los campos faltantes (`MedicamentoForm.jsx`).
+- [ ] Conectar el botón **Guardar** para crear (usar `createMedicamento` del servicio).
+- [ ] Agregar botón **Editar** funcional.
+- [ ] Agregar botón **Eliminar** funcional.
+- [ ] Mostrar mensajes de éxito / error.
+
+### ⚙️ Backend
+> Nota: `getMedicamentos` (listar) ya está implementado como ejemplo de referencia, en el controlador **y** en el modelo. El resto queda pendiente.
+- [ ] Obtener un medicamento por id (`getMedicamentoById` + `findById`).
+- [ ] Crear medicamento (`createMedicamento` + `create`).
+- [ ] Actualizar medicamento (`updateMedicamento` + `update`).
+- [ ] Eliminar medicamento (`deleteMedicamento` + `remove`).
+- [ ] Agregar **validaciones**.
+- [ ] ⚠️ Cada función debe terminar respondiendo (`res.json` / `res.status`), o la petición se queda colgada.
+
+### 🗄️ Base de datos
+- [ ] Revisar la tabla `medicamentos`.
+- [ ] Probar la conexión MySQL.
+- [ ] Insertar datos de prueba.
+
+### 🧪 QA
+- [ ] Probar creación.
+- [ ] Probar listado.
+- [ ] Probar edición.
+- [ ] Probar eliminación.
+- [ ] Probar validaciones.
+
+---
+
+## 13. Comandos de Git básicos para trabajar en equipo
+
+```powershell
+# Traer los últimos cambios antes de empezar
+git pull origin main
+
+# Crear tu propia rama de trabajo (recomendado)
+git checkout -b feature/nombre-de-tu-tarea
+
+# Ver el estado de tus cambios
+git status
+
+# Agregar y confirmar cambios
+git add .
+git commit -m "feat: descripción de lo que hiciste"
+
+# Subir tu rama al repositorio
+git push origin feature/nombre-de-tu-tarea
+```
+
+Luego abre un **Pull Request** en GitHub para revisar y unir tu trabajo a `main`.
+
+---
+
+## 14. Checklist para verificar que la base quedó funcionando
+
+- [ ] `npm install` termina sin errores en `backend/` y `frontend/`.
+- [ ] La base de datos `farmastock_db` y la tabla `medicamentos` existen.
+- [ ] `backend/.env` está configurado con las credenciales correctas.
+- [ ] `npm run dev` en backend muestra: `🚀 Servidor backend corriendo...` y `✅ Conexión a MySQL establecida`.
+- [ ] http://localhost:3001/ responde con un JSON.
+- [ ] `npm run dev` en frontend abre http://localhost:5173 y muestra la página de FarmaStock.
+
+---
+
+## Estructura del proyecto
+
+```
+farmastock-crud-medicamentos/
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── db.js                    # Conexión a MySQL
+│   │   ├── controllers/
+│   │   │   └── medicamentoController.js # Capa HTTP: recibe y responde (con TODOs)
+│   │   ├── models/
+│   │   │   └── medicamentoModel.js      # Capa de datos: consultas SQL (con TODOs)
+│   │   ├── routes/
+│   │   │   └── medicamentoRoutes.js     # Rutas /api/medicamentos
+│   │   ├── app.js                       # Configuración Express
+│   │   └── server.js                    # Arranque del servidor
+│   ├── database/
+│   │   ├── schema.sql                   # Crea BD y tabla
+│   │   └── seed.sql                     # Datos de ejemplo
+│   ├── .env.example
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── MedicamentoForm.jsx      # Formulario (con TODOs)
+│   │   │   └── MedicamentoList.jsx      # Tabla (con TODOs)
+│   │   ├── pages/
+│   │   │   └── MedicamentoPage.jsx      # Página principal
+│   │   ├── services/
+│   │   │   └── medicamentoService.js    # Llamadas a la API
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+├── .gitignore
+└── README.md
+```

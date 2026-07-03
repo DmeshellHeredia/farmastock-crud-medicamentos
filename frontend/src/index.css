@@ -1,0 +1,41 @@
+/* Estilos base mínimos. El equipo puede reemplazar o ampliar libremente. */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f4f6f8;
+  color: #1f2937;
+}
+
+.contenedor {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h1 {
+  color: #0d6efd;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+th, td {
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+th {
+  background: #f9fafb;
+}
+
+button {
+  cursor: pointer;
+}
