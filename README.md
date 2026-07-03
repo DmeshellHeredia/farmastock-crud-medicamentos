@@ -192,27 +192,39 @@ Todo el código base está listo; la lógica pendiente está marcada con `TODO`.
 
 ---
 
-## 13. Comandos de Git básicos para trabajar en equipo
+## 13. Flujo de trabajo en equipo con Git
+
+> 🔒 **La rama `main` está protegida.** NO se puede hacer `git push` directo a `main`
+> (GitHub lo rechaza). **Todo** cambio debe entrar por un **Pull Request** que debe ser
+> **aprobado por el dueño del repositorio** (definido en `.github/CODEOWNERS`) antes de fusionarse.
+
+Pasos que debe seguir cada integrante:
 
 ```powershell
-# Traer los últimos cambios antes de empezar
+# 1. Traer los últimos cambios de main antes de empezar
+git checkout main
 git pull origin main
 
-# Crear tu propia rama de trabajo (recomendado)
+# 2. Crear tu propia rama de trabajo
 git checkout -b feature/nombre-de-tu-tarea
 
-# Ver el estado de tus cambios
+# 3. Trabajar, y ver el estado de tus cambios
 git status
 
-# Agregar y confirmar cambios
+# 4. Agregar y confirmar tus cambios
 git add .
 git commit -m "feat: descripción de lo que hiciste"
 
-# Subir tu rama al repositorio
+# 5. Subir TU RAMA (nunca main) al repositorio
 git push origin feature/nombre-de-tu-tarea
 ```
 
-Luego abre un **Pull Request** en GitHub para revisar y unir tu trabajo a `main`.
+6. En GitHub, abre un **Pull Request** de tu rama hacia `main`.
+7. Espera a que el **dueño del repo revise y apruebe** el PR.
+8. Una vez aprobado, se fusiona a `main`. ✅
+
+> ⚠️ Antes de poder subir ramas, cada integrante debe estar agregado como
+> **colaborador** del repo (Settings → Collaborators).
 
 ---
 
@@ -231,6 +243,8 @@ Luego abre un **Pull Request** en GitHub para revisar y unir tu trabajo a `main`
 
 ```
 farmastock-crud-medicamentos/
+├── .github/
+│   └── CODEOWNERS                       # Define quién debe aprobar los Pull Requests
 ├── backend/
 │   ├── src/
 │   │   ├── config/
