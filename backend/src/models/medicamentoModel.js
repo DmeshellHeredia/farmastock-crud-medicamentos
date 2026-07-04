@@ -4,10 +4,10 @@
 
 const { pool } = require('../config/db');
 
-// 1. Obtener todos los medicamentos
-const getMedicamentos = async () => {
+// 1. Obtener todos los medicamentos (Renombrado a findAll)
+const findAll = async () => {
     const query = 'SELECT * FROM medicamentos WHERE estado = "activo"';
-    const [rows] = await pool.query(query); // Usamos pool.query directamente
+    const [rows] = await pool.query(query);
     return rows;
 };
 
@@ -58,7 +58,7 @@ const remove = async (id) => {
 };
 
 module.exports = {
-    getMedicamentos,
+    findAll, // <-- Cambiado aquí también
     findById,
     create,
     update,
