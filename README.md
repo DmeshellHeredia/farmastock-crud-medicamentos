@@ -3,7 +3,7 @@
 Proyecto universitario para la práctica de **Scrum Poker** y **Sprint Planning**.
 El incremento funcional final será un **CRUD de Gestión de Medicamentos** para FarmaStock.
 
-> ⚠️ **Estado actual:** solo está montada la **base técnica** del proyecto. La lógica del CRUD queda pendiente y está marcada con comentarios `TODO` para que el equipo la complete.
+> ⚠️ **Estado actual:** la **base técnica** está montada y la **capa de modelo del backend (acceso a datos) está completa**: `findAll`, `findById`, `create`, `update` y `remove` están implementadas y probadas contra MySQL. Falta **conectar el controlador** a esas funciones (hoy solo el *listar* responde de punta a punta) y completar la lógica del frontend. Lo pendiente sigue marcado con comentarios `TODO`.
 
 ---
 
@@ -170,11 +170,21 @@ Todo el código base está listo; la lógica pendiente está marcada con `TODO`.
 - [ ] Mostrar mensajes de éxito / error.
 
 ### ⚙️ Backend
-> Nota: `getMedicamentos` (listar) ya está implementado como ejemplo de referencia, en el controlador **y** en el modelo. El resto queda pendiente.
-- [ ] Obtener un medicamento por id (`getMedicamentoById` + `findById`).
-- [ ] Crear medicamento (`createMedicamento` + `create`).
-- [ ] Actualizar medicamento (`updateMedicamento` + `update`).
-- [ ] Eliminar medicamento (`deleteMedicamento` + `remove`).
+> Nota: la **capa de modelo** (`medicamentoModel.js`) ya tiene **todas** las funciones implementadas y probadas contra MySQL (`findAll`, `findById`, `create`, `update`, `remove`). Lo que falta es **conectarlas desde el controlador**: hoy solo `getMedicamentos` (listar) responde de punta a punta; el resto de las rutas devuelve `501 No implementado`.
+
+**Modelo (`medicamentoModel.js`) — listo:**
+- [x] Listar (`findAll`) ✅
+- [x] Obtener por id (`findById`) ✅
+- [x] Crear (`create`) ✅
+- [x] Actualizar (`update`) ✅
+- [x] Eliminar / borrado lógico (`remove`) ✅
+
+**Controlador (`medicamentoController.js`) — pendiente:**
+- [x] Listar (`getMedicamentos` → `findAll`) ✅
+- [ ] Obtener por id (`getMedicamentoById` → `findById`).
+- [ ] Crear (`createMedicamento` → `create`).
+- [ ] Actualizar (`updateMedicamento` → `update`).
+- [ ] Eliminar (`deleteMedicamento` → `remove`).
 - [ ] Agregar **validaciones**.
 - [ ] ⚠️ Cada función debe terminar respondiendo (`res.json` / `res.status`), o la petición se queda colgada.
 
@@ -252,7 +262,7 @@ farmastock-crud-medicamentos/
 │   │   ├── controllers/
 │   │   │   └── medicamentoController.js # Capa HTTP: recibe y responde (con TODOs)
 │   │   ├── models/
-│   │   │   └── medicamentoModel.js      # Capa de datos: consultas SQL (con TODOs)
+│   │   │   └── medicamentoModel.js      # Capa de datos: consultas SQL (CRUD completo)
 │   │   ├── routes/
 │   │   │   └── medicamentoRoutes.js     # Rutas /api/medicamentos
 │   │   ├── app.js                       # Configuración Express
