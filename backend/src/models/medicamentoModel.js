@@ -2,26 +2,24 @@
 // Responsabilidad única: SOLO habla con la base de datos (consultas SQL).
 // No conoce req/res ni nada de HTTP. El controlador lo usa.
 
-const db = require('../config/db');
+const { pool } = require('../config/db');
 
-// 1. Obtener todos los medicamentos (Usando el nombre original del repo)
+// 1. Obtener todos los medicamentos
 const getMedicamentos = async () => {
     const query = 'SELECT * FROM medicamentos WHERE estado = "activo"';
-    // Usamos .promise().query() para asegurar compatibilidad con mysql2 estándar
-    const [rows] = await db.promise().query(query);
+    const [rows] = await pool.query(query); // Usamos pool.query directamente
     return rows;
 };
 
 // 2. Obtener un medicamento por su ID
 const findById = async (id) => {
     const query = 'SELECT * FROM medicamentos WHERE id = ? AND estado = "activo"';
-    const [rows] = await db.promise().query(query, [id]);
-    return rows[0]; // Retorna el objeto
+    const [rows] = await pool.query(query, [id]);
+    return rows[0]; 
 };
 
 // 3. Crear un nuevo medicamento
 const create = async (medicamento) => {
-    // CORRECCIÓN: Usamos exactamente las columnas del schema.sql de tu equipo
     const { nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor } = medicamento;
     
     const query = `
@@ -30,7 +28,7 @@ const create = async (medicamento) => {
         VALUES (?, ?, ?, ?, ?, ?, 'activo')
     `;
 
-    const [result] = await db.promise().query(query, [
+    const [result] = await pool.query(query, [
         nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor
     ]);
     return result;
@@ -46,7 +44,7 @@ const update = async (id, medicamento) => {
         WHERE id = ?
     `;
 
-    const [result] = await db.promise().query(query, [
+    const [result] = await pool.query(query, [
         nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor, id
     ]);
     return result;
@@ -55,12 +53,12 @@ const update = async (id, medicamento) => {
 // 5. Eliminar un medicamento (Borrado lógico)
 const remove = async (id) => {
     const query = 'UPDATE medicamentos SET estado = "inactivo" WHERE id = ?';
-    const [result] = await db.promise().query(query, [id]);
+    const [result] = await pool.query(query, [id]);
     return result;
 };
 
 module.exports = {
-    getMedicamentos, // Nombre restaurado
+    getMedicamentos,
     findById,
     create,
     update,

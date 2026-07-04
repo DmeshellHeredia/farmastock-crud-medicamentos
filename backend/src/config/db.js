@@ -2,7 +2,6 @@
 // Un "pool" reutiliza conexiones abiertas en lugar de crear una nueva por cada
 // consulta. Se usa la versión con Promesas para poder usar async/await.
 
-
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
