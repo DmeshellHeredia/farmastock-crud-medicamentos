@@ -4,84 +4,63 @@
 
 const db = require('../config/db');
 
-// Obtener todos los medicamentos activos (Listar)
-const findAll = async () => {
+// 1. Obtener todos los medicamentos (Usando el nombre original del repo)
+const getMedicamentos = async () => {
     const query = 'SELECT * FROM medicamentos WHERE estado = "activo"';
-    const [rows] = await db.execute(query);
+    // Usamos .promise().query() para asegurar compatibilidad con mysql2 estándar
+    const [rows] = await db.promise().query(query);
     return rows;
 };
 
-// Obtener un medicamento por su ID
+// 2. Obtener un medicamento por su ID
 const findById = async (id) => {
     const query = 'SELECT * FROM medicamentos WHERE id = ? AND estado = "activo"';
-    const [rows] = await db.execute(query, [id]);
-    return rows[0]; // Retorna solo el objeto encontrado
+    const [rows] = await db.promise().query(query, [id]);
+    return rows[0]; // Retorna el objeto
 };
 
-// Crear un nuevo medicamento (El requerimiento clave de tu ticket)
+// 3. Crear un nuevo medicamento
 const create = async (medicamento) => {
-    const { 
-        nombre_comercial, 
-        principio_activo, 
-        lote, 
-        fecha_vencimiento, 
-        costo_adquisicion, 
-        precio_venta, 
-        stock_actual, 
-        stock_minimo 
-    } = medicamento;
-
+    // CORRECCIÓN: Usamos exactamente las columnas del schema.sql de tu equipo
+    const { nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor } = medicamento;
+    
     const query = `
         INSERT INTO medicamentos 
-        (nombre_comercial, principio_activo, lote, fecha_vencimiento, costo_adquisicion, precio_venta, stock_actual, stock_minimo) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        (nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor, estado) 
+        VALUES (?, ?, ?, ?, ?, ?, 'activo')
     `;
 
-    const [result] = await db.execute(query, [
-        nombre_comercial, 
-        principio_activo, 
-        lote, 
-        fecha_vencimiento, 
-        costo_adquisicion, 
-        precio_venta, 
-        stock_actual, 
-        stock_minimo
+    const [result] = await db.promise().query(query, [
+        nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor
     ]);
-
     return result;
 };
 
-// Actualizar un medicamento existente
+// 4. Actualizar un medicamento existente
 const update = async (id, medicamento) => {
-    const { 
-        nombre_comercial, principio_activo, lote, fecha_vencimiento, 
-        costo_adquisicion, precio_venta, stock_actual, stock_minimo 
-    } = medicamento;
+    const { nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor } = medicamento;
 
     const query = `
         UPDATE medicamentos 
-        SET nombre_comercial = ?, principio_activo = ?, lote = ?, fecha_vencimiento = ?, 
-            costo_adquisicion = ?, precio_venta = ?, stock_actual = ?, stock_minimo = ?
+        SET nombre = ?, categoria = ?, precio = ?, cantidad = ?, fecha_vencimiento = ?, proveedor = ?
         WHERE id = ?
     `;
 
-    const [result] = await db.execute(query, [
-        nombre_comercial, principio_activo, lote, fecha_vencimiento, 
-        costo_adquisicion, precio_venta, stock_actual, stock_minimo, id
+    const [result] = await db.promise().query(query, [
+        nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor, id
     ]);
-    
     return result;
 };
 
-// Eliminar un medicamento (Borrado lógico cambiando el estado)
+// 5. Eliminar un medicamento (Borrado lógico)
 const remove = async (id) => {
     const query = 'UPDATE medicamentos SET estado = "inactivo" WHERE id = ?';
-    const [result] = await db.execute(query, [id]);
+    const [result] = await db.promise().query(query, [id]);
     return result;
 };
 
 module.exports = {
-    findAll,
+    getMedicamentos, // Nombre restaurado
     findById,
     create,
     update,
