@@ -17,26 +17,100 @@ const getMedicamentos = async (req, res) => {
 
 // GET /api/medicamentos/:id  -> Obtener un medicamento por su id
 const getMedicamentoById = async (req, res) => {
-  // TODO (Backend): Implementar.
-  return res.status(501).json({ mensaje: 'No implementado todavía.' });
+    try {
+        const { id } = req.params; // Sacamos el ID de la URL
+        const medicamento = await medicamentoModel.findById(id);
+        
+        if (!medicamento) {
+            return res.status(404).json({ error: 'Medicamento no encontrado' });
+        }
+        
+        return res.json(medicamento);
+    } catch (error) {
+        console.error('Error en getMedicamentoById:', error.message);
+        return res.status(500).json({ error: 'Error al obtener el medicamento.' });
+    }
 };
 
 // POST /api/medicamentos  -> Crear un medicamento
 const createMedicamento = async (req, res) => {
-  // TODO (Backend): Implementar.
-  return res.status(501).json({ mensaje: 'No implementado todavía.' });
+    try {
+        const { nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor } = req.body;
+
+        if (!nombre || !categoria || !precio || !fecha_vencimiento || !proveedor) {
+            return res.status(400).json({ error: 'Faltan campos obligatorios' });
+        }
+
+        const nuevoMedicamento = { 
+            nombre, 
+            categoria, 
+            precio, 
+            cantidad: cantidad || 0, 
+            fecha_vencimiento, 
+            proveedor 
+        };
+        
+        const result = await medicamentoModel.create(nuevoMedicamento);
+
+        res.status(201).json({ 
+            message: 'Medicamento creado exitosamente',
+            id: result.insertId 
+        });
+    } catch (error) {
+        console.error('Error al crear medicamento:', error);
+        res.status(500).json({ error: 'Error interno del servidor al crear el medicamento' });
+    }
 };
 
-// PUT /api/medicamentos/:id  -> Actualizar un medicamento
+// PUT /api/medicamentos/:id -> Actualizar un medicamento
 const updateMedicamento = async (req, res) => {
-  // TODO (Backend): Implementar.
-  return res.status(501).json({ mensaje: 'No implementado todavía.' });
+    try {
+        const { id } = req.params;
+        const { nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor } = req.body;
+
+        // FIX 1: Verificamos si son exactamente 'undefined' para no rechazar el 0
+        if (nombre === undefined || categoria === undefined || precio === undefined) {
+            return res.status(400).json({ error: 'Faltan campos obligatorios para actualizar' });
+        }
+
+        // FIX 2: Defaulteamos la cantidad a 0 si viene vacía, igual que en el create
+        const datosActualizados = { 
+            nombre, 
+            categoria, 
+            precio, 
+            cantidad: cantidad || 0, 
+            fecha_vencimiento, 
+            proveedor 
+        };
+        
+        const result = await medicamentoModel.update(id, datosActualizados);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Medicamento no encontrado o no se pudo actualizar' });
+        }
+
+        return res.json({ mensaje: 'Medicamento actualizado correctamente' });
+    } catch (error) {
+        console.error('Error en updateMedicamento:', error.message);
+        return res.status(500).json({ error: 'Error al actualizar el medicamento.' });
+    }
 };
 
-// DELETE /api/medicamentos/:id  -> Eliminar un medicamento
+// DELETE /api/medicamentos/:id -> Eliminar un medicamento (lógico)
 const deleteMedicamento = async (req, res) => {
-  // TODO (Backend): Implementar.
-  return res.status(501).json({ mensaje: 'No implementado todavía.' });
+    try {
+        const { id } = req.params;
+        const result = await medicamentoModel.remove(id);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Medicamento no encontrado para eliminar' });
+        }
+
+        return res.json({ mensaje: 'Medicamento eliminado correctamente' });
+    } catch (error) {
+        console.error('Error en deleteMedicamento:', error.message);
+        return res.status(500).json({ error: 'Error al eliminar el medicamento.' });
+    }
 };
 
 module.exports = {
