@@ -4,22 +4,63 @@
 
 const { pool } = require('../config/db');
 
-// Devuelve todos los medicamentos.
-async function findAll() {
-  const [rows] = await pool.query('SELECT * FROM medicamentos ORDER BY id DESC');
-  return rows;
-}
+// 1. Obtener todos los medicamentos (Renombrado a findAll)
+const findAll = async () => {
+    const query = 'SELECT * FROM medicamentos WHERE estado = "activo"';
+    const [rows] = await pool.query(query);
+    return rows;
+};
 
-// TODO (Backend): Devolver un medicamento por su id.
-async function findById(id) {}
+// 2. Obtener un medicamento por su ID
+const findById = async (id) => {
+    const query = 'SELECT * FROM medicamentos WHERE id = ? AND estado = "activo"';
+    const [rows] = await pool.query(query, [id]);
+    return rows[0]; 
+};
 
-// TODO (Backend): Insertar un medicamento y devolver el creado.
-async function create(medicamento) {}
+// 3. Crear un nuevo medicamento
+const create = async (medicamento) => {
+    const { nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor } = medicamento;
+    
+    const query = `
+        INSERT INTO medicamentos 
+        (nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor, estado) 
+        VALUES (?, ?, ?, ?, ?, ?, 'activo')
+    `;
 
-// TODO (Backend): Actualizar un medicamento por su id.
-async function update(id, medicamento) {}
+    const [result] = await pool.query(query, [
+        nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor
+    ]);
+    return result;
+};
 
-// TODO (Backend): Eliminar un medicamento por su id.
-async function remove(id) {}
+// 4. Actualizar un medicamento existente
+const update = async (id, medicamento) => {
+    const { nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor } = medicamento;
 
-module.exports = { findAll, findById, create, update, remove };
+    const query = `
+        UPDATE medicamentos 
+        SET nombre = ?, categoria = ?, precio = ?, cantidad = ?, fecha_vencimiento = ?, proveedor = ?
+        WHERE id = ?
+    `;
+
+    const [result] = await pool.query(query, [
+        nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor, id
+    ]);
+    return result;
+};
+
+// 5. Eliminar un medicamento (Borrado lógico)
+const remove = async (id) => {
+    const query = 'UPDATE medicamentos SET estado = "inactivo" WHERE id = ?';
+    const [result] = await pool.query(query, [id]);
+    return result;
+};
+
+module.exports = {
+    findAll, // <-- Cambiado aquí también
+    findById,
+    create,
+    update,
+    remove
+};
