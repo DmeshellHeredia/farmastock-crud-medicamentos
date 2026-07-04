@@ -68,12 +68,21 @@ const updateMedicamento = async (req, res) => {
         const { id } = req.params;
         const { nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor } = req.body;
 
-        // Validamos que por lo menos envíen el nombre para actualizar
-        if (!nombre || !categoria || !precio) {
+        // FIX 1: Verificamos si son exactamente 'undefined' para no rechazar el 0
+        if (nombre === undefined || categoria === undefined || precio === undefined) {
             return res.status(400).json({ error: 'Faltan campos obligatorios para actualizar' });
         }
 
-        const datosActualizados = { nombre, categoria, precio, cantidad, fecha_vencimiento, proveedor };
+        // FIX 2: Defaulteamos la cantidad a 0 si viene vacía, igual que en el create
+        const datosActualizados = { 
+            nombre, 
+            categoria, 
+            precio, 
+            cantidad: cantidad || 0, 
+            fecha_vencimiento, 
+            proveedor 
+        };
+        
         const result = await medicamentoModel.update(id, datosActualizados);
 
         if (result.affectedRows === 0) {
