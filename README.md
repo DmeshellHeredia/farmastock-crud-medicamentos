@@ -3,7 +3,7 @@
 Proyecto universitario para la práctica de **Scrum Poker** y **Sprint Planning**.
 El incremento funcional final será un **CRUD de Gestión de Medicamentos** para FarmaStock.
 
-> ⚠️ **Estado actual:** la **base técnica** está montada y la **capa de modelo del backend (acceso a datos) está completa**: `findAll`, `findById`, `create`, `update` y `remove` están implementadas y probadas contra MySQL. Falta **conectar el controlador** a esas funciones (hoy solo el *listar* responde de punta a punta) y completar la lógica del frontend. Lo pendiente sigue marcado con comentarios `TODO`.
+> ✅ **Estado actual:** el **backend está completo**. El CRUD de medicamentos funciona de punta a punta contra MySQL: modelo (`findAll`, `findById`, `create`, `update`, `remove`) **y** controlador (los 5 endpoints REST con validaciones y códigos HTTP correctos), todo probado. Lo que queda pendiente es el **frontend**: conectar los botones Guardar / Editar / Eliminar (siguen marcados con `TODO`).
 
 ---
 
@@ -142,6 +142,32 @@ npm run dev
 
 > `npm run dev` usa **nodemon** (reinicia solo al guardar). También existe `npm start`.
 
+### Endpoints de la API (todos funcionando)
+
+Base URL: `http://localhost:3001/api/medicamentos`
+
+| Método | Ruta      | Descripción                        | Respuestas |
+| ------ | --------- | ---------------------------------- | ---------- |
+| GET    | `/`       | Listar medicamentos activos        | `200` |
+| GET    | `/:id`    | Obtener uno por id                 | `200` · `404` |
+| POST   | `/`       | Crear medicamento                  | `201` · `400` |
+| PUT    | `/:id`    | Actualizar medicamento             | `200` · `400` · `404` |
+| DELETE | `/:id`    | Eliminar (borrado lógico)          | `200` · `404` |
+
+Campos del body para crear/actualizar: `nombre`, `categoria`, `precio`, `cantidad`, `fecha_vencimiento`, `proveedor`.
+
+Ejemplo rápido (PowerShell):
+
+```powershell
+# Listar
+curl http://localhost:3001/api/medicamentos
+
+# Crear
+curl -X POST http://localhost:3001/api/medicamentos `
+  -H "Content-Type: application/json" `
+  -d '{\"nombre\":\"Aspirina\",\"categoria\":\"Analgésico\",\"precio\":3.5,\"cantidad\":50,\"fecha_vencimiento\":\"2027-01-01\",\"proveedor\":\"Bayer\"}'
+```
+
 ---
 
 ## 11. Cómo correr el frontend
@@ -169,24 +195,24 @@ Todo el código base está listo; la lógica pendiente está marcada con `TODO`.
 - [ ] Agregar botón **Eliminar** funcional.
 - [ ] Mostrar mensajes de éxito / error.
 
-### ⚙️ Backend
-> Nota: la **capa de modelo** (`medicamentoModel.js`) ya tiene **todas** las funciones implementadas y probadas contra MySQL (`findAll`, `findById`, `create`, `update`, `remove`). Lo que falta es **conectarlas desde el controlador**: hoy solo `getMedicamentos` (listar) responde de punta a punta; el resto de las rutas devuelve `501 No implementado`.
+### ⚙️ Backend — ✅ completo
+> El CRUD está implementado y probado de punta a punta (modelo + controlador + rutas). No queda nada pendiente por acá.
 
-**Modelo (`medicamentoModel.js`) — listo:**
+**Modelo (`medicamentoModel.js`):**
 - [x] Listar (`findAll`) ✅
 - [x] Obtener por id (`findById`) ✅
 - [x] Crear (`create`) ✅
 - [x] Actualizar (`update`) ✅
 - [x] Eliminar / borrado lógico (`remove`) ✅
 
-**Controlador (`medicamentoController.js`) — pendiente:**
+**Controlador (`medicamentoController.js`):**
 - [x] Listar (`getMedicamentos` → `findAll`) ✅
-- [ ] Obtener por id (`getMedicamentoById` → `findById`).
-- [ ] Crear (`createMedicamento` → `create`).
-- [ ] Actualizar (`updateMedicamento` → `update`).
-- [ ] Eliminar (`deleteMedicamento` → `remove`).
-- [ ] Agregar **validaciones**.
-- [ ] ⚠️ Cada función debe terminar respondiendo (`res.json` / `res.status`), o la petición se queda colgada.
+- [x] Obtener por id (`getMedicamentoById` → `findById`) ✅
+- [x] Crear (`createMedicamento` → `create`) ✅
+- [x] Actualizar (`updateMedicamento` → `update`) ✅
+- [x] Eliminar (`deleteMedicamento` → `remove`) ✅
+- [x] Validaciones de campos obligatorios (400 si faltan) ✅
+- [x] Códigos HTTP correctos (200 / 201 / 400 / 404 / 500) ✅
 
 ### 🗄️ Base de datos
 - [ ] Revisar la tabla `medicamentos`.
@@ -260,7 +286,7 @@ farmastock-crud-medicamentos/
 │   │   ├── config/
 │   │   │   └── db.js                    # Conexión a MySQL
 │   │   ├── controllers/
-│   │   │   └── medicamentoController.js # Capa HTTP: recibe y responde (con TODOs)
+│   │   │   └── medicamentoController.js # Capa HTTP: recibe y responde (CRUD completo)
 │   │   ├── models/
 │   │   │   └── medicamentoModel.js      # Capa de datos: consultas SQL (CRUD completo)
 │   │   ├── routes/
