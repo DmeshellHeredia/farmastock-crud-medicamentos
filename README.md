@@ -214,17 +214,19 @@ Todo el código base está listo; la lógica pendiente está marcada con `TODO`.
 - [x] Validaciones de campos obligatorios (400 si faltan) ✅
 - [x] Códigos HTTP correctos (200 / 201 / 400 / 404 / 500) ✅
 
-### 🗄️ Base de datos
-- [ ] Revisar la tabla `medicamentos`.
-- [ ] Probar la conexión MySQL.
-- [ ] Insertar datos de prueba.
+### 🗄️ Base de datos — ✅ listo
+- [x] Tabla `medicamentos` creada (`schema.sql`) ✅
+- [x] Conexión MySQL probada (`✅ Conexión a MySQL establecida` al arrancar) ✅
+- [x] Datos de prueba insertados (`seed.sql`, 3 medicamentos) ✅
 
-### 🧪 QA
-- [ ] Probar creación.
-- [ ] Probar listado.
-- [ ] Probar edición.
-- [ ] Probar eliminación.
-- [ ] Probar validaciones.
+### 🧪 QA — ✅ backend probado
+> El backend se probó de punta a punta contra MySQL (los 5 endpoints con casos de éxito y de error). Falta el QA del frontend una vez conectado.
+- [x] Crear (`POST` → `201` / `400`) ✅
+- [x] Listar (`GET` → `200`) ✅
+- [x] Editar (`PUT` → `200` / `400` / `404`, incluye update parcial) ✅
+- [x] Eliminar (`DELETE` → `200` / `404`) ✅
+- [x] Validaciones (campos obligatorios, `precio: 0`) ✅
+- [ ] QA del frontend (una vez conectados los botones).
 
 ---
 
