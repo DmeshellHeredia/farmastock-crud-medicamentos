@@ -100,6 +100,14 @@ function MedicamentoForm({ medicamentoAEditar, onMedicamentoGuardado, onCancelar
           </button>
         )}
       </div>
+
+     
+    
+
+      <button className="btn-guardar" type="submit">
+        Guardar
+      </button>
+
     </form>
   );
 }
