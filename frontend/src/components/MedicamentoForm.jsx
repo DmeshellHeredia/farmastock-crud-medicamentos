@@ -1,7 +1,10 @@
-import { useState } from 'react';
-import { createMedicamento } from '../services/medicamentoService.js';
+import { useState, useEffect } from 'react';
+import {
+  createMedicamento,
+  updateMedicamento,
+} from '../services/medicamentoService.js';
 
-function MedicamentoForm() {
+function MedicamentoForm({ medicamentoEditar, setMedicamentoEditar, onGuardar }) {
   const [formulario, setFormulario] = useState({
     nombre: '',
     categoria: '',
@@ -13,6 +16,23 @@ function MedicamentoForm() {
 
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (medicamentoEditar) {
+      setFormulario({
+        nombre: medicamentoEditar.nombre,
+        categoria: medicamentoEditar.categoria,
+        precio: medicamentoEditar.precio,
+        cantidad: medicamentoEditar.cantidad,
+        fecha_vencimiento:
+          medicamentoEditar.fecha_vencimiento?.split('T')[0] || '',
+        proveedor: medicamentoEditar.proveedor,
+      });
+
+      setMensaje('');
+      setError('');
+    }
+  }, [medicamentoEditar]);
 
   const handleChange = (e) => {
     setFormulario({
@@ -50,36 +70,53 @@ function MedicamentoForm() {
     }
 
     try {
-      await createMedicamento({
-        ...formulario,
-        precio: Number(formulario.precio),
-        cantidad: Number(formulario.cantidad) || 0,
-      });
+      if (medicamentoEditar) {
+        await updateMedicamento(
+          medicamentoEditar.id,
+          {
+            ...formulario,
+            precio: Number(formulario.precio),
+            cantidad: Number(formulario.cantidad) || 0,
+          }
+        );
 
-      setMensaje('Medicamento registrado correctamente.');
+        setMensaje('Medicamento actualizado correctamente.');
+
+        onGuardar();
+
+      } else {
+        await createMedicamento({
+          ...formulario,
+          precio: Number(formulario.precio),
+          cantidad: Number(formulario.cantidad) || 0,
+        });
+
+        setMensaje('Medicamento registrado correctamente.');
+      }
+
+        onGuardar();
+
+
       limpiarFormulario();
+      setMedicamentoEditar(null);
     } catch (err) {
       console.error(err);
-      setError('Error al registrar el medicamento.');
+      setError('Error al guardar el medicamento.');
+
     }
   };
 
   return (
     <form className="medicamento-form" onSubmit={handleSubmit}>
+      <h2>
+        {medicamentoEditar
+          ? 'Editar medicamento'
+          : 'Registrar medicamento'}
+      </h2>
 
-      <h2>Registrar medicamento</h2>
+      {mensaje && <div className="mensaje-exito">{mensaje}</div>}
 
-      {mensaje && (
-        <div className="mensaje-exito">
-          {mensaje}
-        </div>
-      )}
-
-      {error && (
-        <div className="mensaje-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="mensaje-error">{error}</div>}
 
       <div className="form-group">
         <label>Nombre</label>
@@ -104,7 +141,6 @@ function MedicamentoForm() {
       </div>
 
       <div className="form-row">
-
         <div className="form-group">
           <label>Precio</label>
           <input
@@ -125,11 +161,9 @@ function MedicamentoForm() {
             onChange={handleChange}
           />
         </div>
-
       </div>
 
       <div className="form-row">
-
         <div className="form-group">
           <label>Fecha de vencimiento</label>
           <input
@@ -150,13 +184,13 @@ function MedicamentoForm() {
             placeholder="Ej. Bayer"
           />
         </div>
-
       </div>
 
       <button className="btn-guardar" type="submit">
-        Guardar
+        {medicamentoEditar
+          ? 'Actualizar medicamento'
+          : 'Guardar medicamento'}
       </button>
-
     </form>
   );
 }
