@@ -1,23 +1,36 @@
+import { useState } from 'react';
 import MedicamentoForm from '../components/MedicamentoForm.jsx';
 import MedicamentoList from '../components/MedicamentoList.jsx';
 
-// Página principal del CRUD de Medicamentos.
-// Aquí se juntan el formulario y el listado.
-//
-// TODO (Frontend): Manejar aquí el estado compartido (lista de medicamentos,
-// medicamento en edición) y pasar props/funciones a los componentes hijos.
-
 function MedicamentoPage() {
+  const [medicamentoAEditar, setMedicamentoAEditar] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleMedicamentoGuardado = () => {
+    setMedicamentoAEditar(null);
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
   return (
     <div className="contenedor">
-      <h1>FarmaStock — Gestión de Medicamentos</h1>
-      <p>Base del proyecto lista. Completar el CRUD según las tareas asignadas.</p>
+      {/* Quitamos el color en línea para usar el estilo corporativo del CSS */}
+      <h1>FarmaStock</h1>
+      <p style={{ color: '#64748b', marginBottom: '32px', fontSize: '1.1rem' }}>Gestión de inventario y medicamentos.</p>
 
-      {/* Formulario para crear / editar */}
-      <MedicamentoForm />
+      <div className="panel">
+        <MedicamentoForm
+          medicamentoAEditar={medicamentoAEditar}
+          onMedicamentoGuardado={handleMedicamentoGuardado}
+          onCancelarEdicion={() => setMedicamentoAEditar(null)}
+        />
+      </div>
 
-      {/* Tabla / listado de medicamentos */}
-      <MedicamentoList />
+      <div className="panel">
+        <MedicamentoList
+          refreshTrigger={refreshTrigger}
+          onEditar={setMedicamentoAEditar}
+        />
+      </div>
     </div>
   );
 }

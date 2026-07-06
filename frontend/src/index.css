@@ -1,4 +1,18 @@
-/* Estilos base mínimos. El equipo puede reemplazar o ampliar libremente. */
+/* =========================================
+   PALETA "OCEAN" & ESTILOS PROFESIONALES
+   ========================================= */
+:root {
+  --bondi-blue: #0799b6;
+  --san-marino: #4a6eb0;
+  --eden: #114c5f;
+  --sinbad: #9cd2d3;
+  --janna: #f2e6cf;
+  
+  /* Color de apoyo para acciones destructivas (Eliminar) para mantener buena UX */
+  --danger-soft: #d9534f;
+  --danger-dark: #c9302c;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -6,36 +20,214 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  background-color: #f4f6f8;
-  color: #1f2937;
+  background-color: var(--janna); /* Fondo cálido y profesional */
+  color: var(--eden);
 }
 
 .contenedor {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 40px 24px;
 }
 
+/* --- TIPOGRAFÍA Y TÍTULOS --- */
 h1 {
-  color: #0d6efd;
+  color: var(--eden);
+  font-weight: 800;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
 }
 
+h2 {
+  color: var(--eden);
+  margin-top: 0;
+  /* Borde marcado inferior usando el Bondi Blue */
+  border-bottom: 3px solid var(--bondi-blue);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- ANIMACIONES --- */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- PANELES (Tarjetas) --- */
+.panel {
+  background: #ffffff;
+  border-radius: 12px;
+  /* Borde marcado perimetral y acento grueso a la izquierda */
+  border: 1px solid var(--sinbad);
+  border-left: 8px solid var(--eden);
+  box-shadow: 0 10px 20px -5px rgba(17, 76, 95, 0.15);
+  padding: 32px;
+  margin-bottom: 32px;
+  animation: fadeSlideUp 0.6s ease-out forwards; 
+}
+
+.panel:nth-child(3) {
+  animation-delay: 0.15s;
+  opacity: 0; 
+  /* Acento de color distinto para diferenciar la tabla del formulario */
+  border-left: 8px solid var(--san-marino);
+}
+
+/* --- FORMULARIO --- */
+.campo {
+  margin-bottom: 16px;
+}
+
+.campo label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--eden);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 16px;
+  /* Bordes marcados en los inputs con el tono más claro */
+  border: 2px solid var(--sinbad);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  color: var(--eden);
+  font-weight: 500;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--bondi-blue);
+  box-shadow: 0 0 0 4px rgba(7, 153, 182, 0.15);
+}
+
+/* --- BOTONES MODERNOS --- */
+button {
+  cursor: pointer;
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 700;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px -2px rgba(17, 76, 95, 0.25);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Botón Guardar / Registrar */
+.btn-primary { 
+  background-color: var(--bondi-blue); 
+  color: #ffffff; 
+}
+.btn-primary:hover { 
+  background-color: var(--eden); 
+}
+
+/* Botón Editar */
+.btn-warning { 
+  background-color: var(--san-marino); 
+  color: #ffffff; 
+}
+.btn-warning:hover { 
+  background-color: var(--eden); 
+}
+
+/* Botón Eliminar (Mantenemos un rojo profesional para UX, pero estilizado) */
+.btn-danger { 
+  background-color: var(--danger-soft); 
+  color: #ffffff; 
+}
+.btn-danger:hover { 
+  background-color: var(--danger-dark); 
+}
+
+/* Botón Cancelar */
+.btn-secondary { 
+  background-color: var(--sinbad); 
+  color: var(--eden); 
+}
+.btn-secondary:hover { 
+  background-color: var(--bondi-blue); 
+  color: #ffffff;
+}
+
+/* --- TABLA PROFESIONAL --- */
 table {
   width: 100%;
-  border-collapse: collapse;
-  background: #fff;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
 }
 
 th, td {
-  border: 1px solid #e5e7eb;
-  padding: 8px 12px;
+  padding: 16px 12px;
   text-align: left;
+  border-bottom: 2px solid var(--janna);
+  vertical-align: middle;
 }
 
 th {
-  background: #f9fafb;
+  background-color: var(--sinbad);
+  font-weight: 800;
+  color: var(--eden);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
 }
 
-button {
-  cursor: pointer;
+th:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+
+tr {
+  transition: background-color 0.2s ease;
+}
+
+tr:hover td { 
+  /* Al pasar el mouse, la fila toma el color del fondo principal */
+  background-color: var(--janna); 
+}
+
+/* --- ALERTAS --- */
+.alerta {
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-weight: 700;
+  animation: fadeSlideUp 0.4s ease-out;
+  border-left: 6px solid;
+}
+.alerta-exito { 
+  background-color: var(--sinbad); 
+  color: var(--eden); 
+  border-left-color: var(--bondi-blue); 
+}
+.alerta-error { 
+  background-color: #fde8e8; 
+  color: var(--danger-dark); 
+  border-left-color: var(--danger-dark); 
 }
