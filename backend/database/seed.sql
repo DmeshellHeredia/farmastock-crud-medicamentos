@@ -1,9 +1,6 @@
--- ============================================================================
 -- FarmaStock - Datos de prueba (seed) para la tabla medicamentos
--- ============================================================================
 -- Ejecutar DESPUÉS de schema.sql (PowerShell):
 --   Get-Content backend/database/seed.sql | mysql -u root -p
--- ============================================================================
 
 USE farmastock_db;
 
