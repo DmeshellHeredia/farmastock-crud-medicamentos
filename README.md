@@ -3,7 +3,7 @@
 Proyecto universitario para la práctica de **Scrum Poker** y **Sprint Planning**.
 El incremento funcional final será un **CRUD de Gestión de Medicamentos** para FarmaStock.
 
-> ✅ **Estado actual:** el **backend está completo**. El CRUD de medicamentos funciona de punta a punta contra MySQL: modelo (`findAll`, `findById`, `create`, `update`, `remove`) **y** controlador (los 5 endpoints REST con validaciones y códigos HTTP correctos), todo probado. Lo que queda pendiente es el **frontend**: conectar los botones Guardar / Editar / Eliminar (siguen marcados con `TODO`).
+> 🔶 **Estado actual:** **backend completo** y **frontend casi completo**, ambos probados. Funciona de punta a punta: listar, **crear** y **editar** medicamentos (la tabla se refresca sola tras cada cambio), más el **diálogo de confirmación** al eliminar. Lo único pendiente es **conectar el borrado real** al confirmar (hoy solo confirma y hace `console.log`; el `DELETE` del backend ya existe) — eso es **SCRUM-27**.
 
 ---
 
@@ -187,13 +187,16 @@ npm run dev
 
 Todo el código base está listo; la lógica pendiente está marcada con `TODO`.
 
-### 🎨 Frontend
-> Nota: la tabla que **lista** los medicamentos ya está conectada al backend y funcionando (sirve de ejemplo). Falta lo demás.
-- [ ] Completar el formulario de registro con los campos faltantes (`MedicamentoForm.jsx`).
-- [ ] Conectar el botón **Guardar** para crear (usar `createMedicamento` del servicio).
-- [ ] Agregar botón **Editar** funcional.
-- [ ] Agregar botón **Eliminar** funcional.
-- [ ] Mostrar mensajes de éxito / error.
+### 🎨 Frontend — 🔶 casi completo
+> Listar, crear y editar funcionan de punta a punta y probados en el navegador. La lista se refresca sola tras crear/editar. Falta solo conectar el borrado real.
+- [x] Listar medicamentos (`MedicamentoList.jsx`, conectado al backend) ✅
+- [x] Formulario de registro con todos los campos (`MedicamentoForm.jsx`) ✅
+- [x] Botón **Guardar** crea vía `createMedicamento` (`201`) ✅
+- [x] Botón **Editar** funcional (carga el form, actualiza vía `updateMedicamento`) ✅
+- [x] Mensajes de éxito / error + validación de campos ✅
+- [x] La lista se actualiza automáticamente tras crear/editar (estado compartido en `MedicamentoPage`) ✅
+- [x] Botón **Eliminar**: diálogo de confirmación (`window.confirm`) ✅
+- [ ] Conectar el borrado real en el "Eliminar" (llamar a `deleteMedicamento` — **SCRUM-27**). Hoy solo confirma y hace `console.log`.
 
 ### ⚙️ Backend — ✅ completo
 > El CRUD está implementado y probado de punta a punta (modelo + controlador + rutas). No queda nada pendiente por acá.
@@ -219,14 +222,14 @@ Todo el código base está listo; la lógica pendiente está marcada con `TODO`.
 - [x] Conexión MySQL probada (`✅ Conexión a MySQL establecida` al arrancar) ✅
 - [x] Datos de prueba insertados (`seed.sql`, 3 medicamentos) ✅
 
-### 🧪 QA — ✅ backend probado
-> El backend se probó de punta a punta contra MySQL (los 5 endpoints con casos de éxito y de error). Falta el QA del frontend una vez conectado.
-- [x] Crear (`POST` → `201` / `400`) ✅
-- [x] Listar (`GET` → `200`) ✅
-- [x] Editar (`PUT` → `200` / `400` / `404`, incluye update parcial) ✅
-- [x] Eliminar (`DELETE` → `200` / `404`) ✅
+### 🧪 QA — ✅ backend y frontend probados
+> Backend probado contra MySQL (5 endpoints, éxito y error) y frontend probado en el navegador (crear, editar con refresco automático, y el diálogo de confirmar eliminar).
+- [x] Crear: `POST` → `201`/`400` (backend) + form en UI ✅
+- [x] Listar: `GET` → `200` (backend) + tabla en UI ✅
+- [x] Editar: `PUT` → `200`/`400`/`404` (backend) + edición en UI con refresco ✅
+- [x] Eliminar (backend `DELETE` → `200`/`404`) + confirmación en UI ✅
 - [x] Validaciones (campos obligatorios, `precio: 0`) ✅
-- [ ] QA del frontend (una vez conectados los botones).
+- [ ] QA del **borrado real** desde la UI (pendiente de SCRUM-27).
 
 ---
 
@@ -303,8 +306,8 @@ farmastock-crud-medicamentos/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── MedicamentoForm.jsx      # Formulario (con TODOs)
-│   │   │   └── MedicamentoList.jsx      # Tabla (con TODOs)
+│   │   │   ├── MedicamentoForm.jsx      # Formulario crear/editar (funcional)
+│   │   │   └── MedicamentoList.jsx      # Tabla + confirmación al eliminar (falta borrado real: SCRUM-27)
 │   │   ├── pages/
 │   │   │   └── MedicamentoPage.jsx      # Página principal
 │   │   ├── services/
