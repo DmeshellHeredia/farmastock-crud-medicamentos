@@ -82,7 +82,6 @@ function MedicamentoForm({ medicamentoEditar, setMedicamentoEditar, onGuardar })
 
         setMensaje('Medicamento actualizado correctamente.');
 
-        onGuardar();
 
       } else {
         await createMedicamento({
