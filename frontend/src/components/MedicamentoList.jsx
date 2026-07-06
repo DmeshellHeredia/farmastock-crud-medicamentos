@@ -9,7 +9,7 @@ import { getMedicamentos } from '../services/medicamentoService.js';
 //   - Agregar botones "Editar" y "Eliminar" funcionales en cada fila.
 //   - Manejar mejor los estados de carga y error (mensajes al usuario).
 
-function MedicamentoList() {
+function MedicamentoList({ onEditar, actualizar }){
   const [medicamentos, setMedicamentos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -22,7 +22,7 @@ function MedicamentoList() {
         setError('No se pudo conectar con el backend. ¿Está corriendo en el puerto 3001?');
       })
       .finally(() => setCargando(false));
-  }, []);
+  }, [actualizar]);
 
   return (
     <div>
@@ -65,7 +65,7 @@ function MedicamentoList() {
                 <td>{m.estado}</td>
                 <td className="acciones">
 
-                    <button className="btn-editar">
+                    <button className="btn-editar" onClick={() => onEditar(m)}>
                         Editar
                     </button>
 
