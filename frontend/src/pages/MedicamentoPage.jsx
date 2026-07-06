@@ -11,7 +11,7 @@ function MedicamentoPage() {
   return (
     <div className="contenedor">
       <h1>FarmaStock — Gestión de Medicamentos</h1>
-      <p>Base del proyecto lista. Completar el CRUD según las tareas asignadas.</p>
+      <p>Administre el inventario de medicamentos de forma rápida y segura.</p>
 
       {/* Formulario para crear / editar */}
       <MedicamentoForm />

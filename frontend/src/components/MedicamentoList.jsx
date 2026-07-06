@@ -63,10 +63,16 @@ function MedicamentoList() {
                 <td>{m.fecha_vencimiento}</td>
                 <td>{m.proveedor}</td>
                 <td>{m.estado}</td>
-                <td>
-                  {/* TODO (Frontend): Botones Editar y Eliminar */}
-                  <button>Editar</button>{' '}
-                  <button>Eliminar</button>
+                <td className="acciones">
+
+                    <button className="btn-editar">
+                        Editar
+                    </button>
+
+                    <button className="btn-eliminar">
+                        Eliminar
+                    </button>
+
                 </td>
               </tr>
             ))
