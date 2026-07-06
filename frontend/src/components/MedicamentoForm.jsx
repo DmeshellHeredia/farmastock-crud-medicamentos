@@ -1,46 +1,162 @@
 import { useState } from 'react';
-// import { createMedicamento } from '../services/medicamentoService.js';
-
-// Formulario de registro / edición de medicamentos.
-// Semiarmado: tiene el estado y la estructura mínima. El equipo debe completar
-// los campos restantes y conectar el envío con el servicio.
-//
-// TODO (Frontend):
-//   - Agregar los campos faltantes (categoria, precio, cantidad,
-//     fecha_vencimiento, proveedor, estado).
-//   - Al enviar, llamar a createMedicamento() o updateMedicamento().
-//   - Mostrar mensajes de éxito / error.
-//   - Soportar modo edición (recibir un medicamento por props).
+import { createMedicamento } from '../services/medicamentoService.js';
 
 function MedicamentoForm() {
-  const [nombre, setNombre] = useState('');
+  const [formulario, setFormulario] = useState({
+    nombre: '',
+    categoria: '',
+    precio: '',
+    cantidad: '',
+    fecha_vencimiento: '',
+    proveedor: '',
+  });
+
+  const [mensaje, setMensaje] = useState('');
+  const [error, setError] = useState('');
+
+  const handleChange = (e) => {
+    setFormulario({
+      ...formulario,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const limpiarFormulario = () => {
+    setFormulario({
+      nombre: '',
+      categoria: '',
+      precio: '',
+      cantidad: '',
+      fecha_vencimiento: '',
+      proveedor: '',
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO (Frontend): Construir el objeto medicamento y enviarlo al backend.
-    // await createMedicamento({ nombre, categoria, precio, ... });
-    console.log('Enviar medicamento:', { nombre });
+
+    setMensaje('');
+    setError('');
+
+    if (
+      !formulario.nombre ||
+      !formulario.categoria ||
+      !formulario.precio ||
+      !formulario.fecha_vencimiento ||
+      !formulario.proveedor
+    ) {
+      setError('Complete todos los campos obligatorios.');
+      return;
+    }
+
+    try {
+      await createMedicamento({
+        ...formulario,
+        precio: Number(formulario.precio),
+        cantidad: Number(formulario.cantidad) || 0,
+      });
+
+      setMensaje('Medicamento registrado correctamente.');
+      limpiarFormulario();
+    } catch (err) {
+      console.error(err);
+      setError('Error al registrar el medicamento.');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ margin: '24px 0' }}>
+    <form className="medicamento-form" onSubmit={handleSubmit}>
+
       <h2>Registrar medicamento</h2>
 
-      <label>
-        Nombre:{' '}
+      {mensaje && (
+        <div className="mensaje-exito">
+          {mensaje}
+        </div>
+      )}
+
+      {error && (
+        <div className="mensaje-error">
+          {error}
+        </div>
+      )}
+
+      <div className="form-group">
+        <label>Nombre</label>
         <input
           type="text"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          placeholder="Ej: Paracetamol 500mg"
+          name="nombre"
+          value={formulario.nombre}
+          onChange={handleChange}
+          placeholder="Ej. Paracetamol 500mg"
         />
-      </label>
-
-      {/* TODO (Frontend): Agregar aquí el resto de los campos del formulario. */}
-
-      <div style={{ marginTop: 12 }}>
-        <button type="submit">Guardar</button>
       </div>
+
+      <div className="form-group">
+        <label>Categoría</label>
+        <input
+          type="text"
+          name="categoria"
+          value={formulario.categoria}
+          onChange={handleChange}
+          placeholder="Ej. Analgésico"
+        />
+      </div>
+
+      <div className="form-row">
+
+        <div className="form-group">
+          <label>Precio</label>
+          <input
+            type="number"
+            step="0.01"
+            name="precio"
+            value={formulario.precio}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Cantidad</label>
+          <input
+            type="number"
+            name="cantidad"
+            value={formulario.cantidad}
+            onChange={handleChange}
+          />
+        </div>
+
+      </div>
+
+      <div className="form-row">
+
+        <div className="form-group">
+          <label>Fecha de vencimiento</label>
+          <input
+            type="date"
+            name="fecha_vencimiento"
+            value={formulario.fecha_vencimiento}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Proveedor</label>
+          <input
+            type="text"
+            name="proveedor"
+            value={formulario.proveedor}
+            onChange={handleChange}
+            placeholder="Ej. Bayer"
+          />
+        </div>
+
+      </div>
+
+      <button className="btn-guardar" type="submit">
+        Guardar
+      </button>
+
     </form>
   );
 }
