@@ -24,6 +24,19 @@ function MedicamentoList({ onEditar, actualizar }){
       .finally(() => setCargando(false));
   }, [actualizar]);
 
+  const confirmarEliminar = (medicamento) => {
+
+  const confirmar = window.confirm(
+    `¿Está seguro de eliminar "${medicamento.nombre}"?`
+  );
+
+  if (!confirmar) return;
+
+  // Aquí va deleteMedicamento() (SCRUM-27)
+  console.log('Eliminar:', medicamento);
+
+};
+
   return (
     <div>
       <h2>Listado de medicamentos</h2>
@@ -69,7 +82,7 @@ function MedicamentoList({ onEditar, actualizar }){
                         Editar
                     </button>
 
-                    <button className="btn-eliminar">
+                    <button className="btn-eliminar" onClick={() => confirmarEliminar(m)}>
                         Eliminar
                     </button>
 
