@@ -16,6 +16,7 @@ function MedicamentoForm({ medicamentoEditar, setMedicamentoEditar, onGuardar })
 
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
+  const [guardando, setGuardando] = useState(false);
 
   useEffect(() => {
     if (medicamentoEditar) {
@@ -69,6 +70,7 @@ function MedicamentoForm({ medicamentoEditar, setMedicamentoEditar, onGuardar })
       return;
     }
 
+    setGuardando(true);
     try {
       if (medicamentoEditar) {
         await updateMedicamento(
@@ -102,6 +104,8 @@ function MedicamentoForm({ medicamentoEditar, setMedicamentoEditar, onGuardar })
       console.error(err);
       setError('Error al guardar el medicamento.');
 
+    } finally {
+      setGuardando(false);
     }
   };
 
@@ -185,10 +189,10 @@ function MedicamentoForm({ medicamentoEditar, setMedicamentoEditar, onGuardar })
         </div>
       </div>
 
-      <button className="btn-guardar" type="submit">
-        {medicamentoEditar
-          ? 'Actualizar medicamento'
-          : 'Guardar medicamento'}
+      <button className="btn-guardar" type="submit" disabled={guardando}>
+        {guardando
+          ? (medicamentoEditar ? 'Actualizando…' : 'Guardando…')
+          : (medicamentoEditar ? 'Actualizar medicamento' : 'Guardar medicamento')}
       </button>
     </form>
   );

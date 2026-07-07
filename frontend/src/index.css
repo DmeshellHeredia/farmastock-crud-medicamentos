@@ -133,6 +133,11 @@ button {
   background: #157347;
 }
 
+.btn-guardar:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
 .mensaje-exito {
   background: #d1e7dd;
   color: #0f5132;

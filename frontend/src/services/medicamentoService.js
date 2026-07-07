@@ -11,8 +11,9 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 const ENDPOINT = `${API_URL}/medicamentos`;
 
 // Obtener todos los medicamentos
+// Los estados de carga y error se manejan en el componente que la consume
+// (MedicamentoList: `cargando`/`error`; MedicamentoForm: `guardando`/`error`).
 export async function getMedicamentos() {
-  // TODO (Frontend): Manejar errores y estados de carga en el componente.
   const respuesta = await fetch(ENDPOINT);
   if (!respuesta.ok) throw new Error('Error al obtener los medicamentos');
   return respuesta.json();
