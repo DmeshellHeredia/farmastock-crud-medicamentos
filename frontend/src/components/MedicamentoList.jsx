@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getMedicamentos, deleteMedicamento } from '../services/medicamentoService.js';
 
 // Listado / tabla de medicamentos.
-// ✅ CONECTADO AL BACKEND: lista los medicamentos y permite eliminarlos
+//  CONECTADO AL BACKEND: lista los medicamentos y permite eliminarlos
 //    con un modal de confirmación propio (SCRUM-27).
 
 function MedicamentoList({ onEditar, actualizar }) {
